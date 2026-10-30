@@ -1,2 +1,5 @@
-# goldito-web
-Goldito intro website: what it is, how it works, and a waiting list.
+# Goldito web
+
+The intro website for [Goldito](https://github.com/2-Rivers): what it is, how a stay works, and a waiting list.
+
+Part of the plan: milestone "1 · Landing page and video" in the private product repo.
