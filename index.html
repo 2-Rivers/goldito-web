@@ -260,7 +260,7 @@
           <span style="display:block;margin-top:12px">Photos below. See you tomorrow, Sam.</span>
         </div>
         <figure class="plate" style="margin:0">
-          <img src="assets/nap.jpg" width="1024" height="1024" alt="Mumu resting on a white bed, tongue out" loading="lazy">
+          <img src="assets/nap.jpg" width="1024" height="1024" alt="Mumu resting on a leather chair" loading="lazy">
         </figure>
       </div>
     </div>
@@ -303,10 +303,10 @@
   <div class="inner">
     <div class="slips">
       <article class="slipcard paper rise">
-        <img src="assets/nap.jpg" width="1024" height="1024" alt="Mumu resting on a white bed" loading="lazy">
+        <img src="assets/nap.jpg" width="1024" height="1024" alt="Mumu resting on a leather chair" loading="lazy">
         <p class="day">Tuesday, 4:40 pm</p>
         <h3>Mumu had a calm afternoon.</h3>
-        <p>Two hours on the couch, then a short walk. She ate all of her lunch and had her usual energy by dinner.</p>
+        <p>Two hours on her chair, then a short walk. She ate all of her lunch and was full of energy by dinner.</p>
       </article>
       <article class="slipcard paper rise" style="--d:1">
         <img src="assets/meal.jpg" width="673" height="803" alt="A brown and white dog smiling with its eyes closed, a carrot piece beside it" loading="lazy">
@@ -324,7 +324,7 @@
         <video src="assets/play_fetch.mp4" poster="assets/play_fetch.jpg" width="360" height="640" autoplay muted loop playsinline preload="metadata" aria-label="A dog playing fetch"></video>
         <p class="day">Saturday, 11:30 am</p>
         <h3>Fetch in the yard.</h3>
-        <p>Round after round, and still asking for more. A very tired, very happy dog.</p>
+        <p>Round after round of fetch. Tired and happy by the end.</p>
       </article>
     </div>
   </div>
@@ -454,6 +454,21 @@
       }, { rootMargin: "-35% 0px -35% 0px" });
       stages.forEach(function (s) { lit.observe(s); });
     }
+
+    // looping clip: keep it playing while on screen, rest it off screen
+    document.querySelectorAll("video").forEach(function (v) {
+      if (reduce) { v.removeAttribute("autoplay"); v.pause(); return; }
+      var onScreen = false;
+      function go() { if (onScreen && v.paused) { var p = v.play(); if (p && p.catch) p.catch(function () {}); } }
+      v.addEventListener("pause", function () { if (onScreen && !v.ended) setTimeout(go, 150); });
+      v.addEventListener("ended", function () { v.currentTime = 0; go(); });
+      if ("IntersectionObserver" in window) {
+        new IntersectionObserver(function (es) {
+          onScreen = es[0].isIntersecting;
+          if (onScreen) go(); else v.pause();
+        }, { threshold: 0.25 }).observe(v);
+      } else { onScreen = true; go(); }
+    });
   })();
 </script>
 </body>
